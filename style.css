@@ -1,0 +1,25 @@
+* {
+
+}
+
+:root {
+    --grey: rgb(129, 129, 129);
+
+}
+
+header {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    border-bottom: var(--grey) 1px solid;
+}
+
+header img {
+    width: auto;
+    height: 40px;
+}
+
+header h1 {
+    color: var(--grey);
+    font-size: 45px;
+ }
