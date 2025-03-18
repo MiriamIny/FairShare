@@ -23,3 +23,31 @@ header h1 {
     color: var(--grey);
     font-size: 45px;
  }
+ footer {
+    background-color: var(--background-color-1);
+    color: var(--primary-color);
+    height: 50px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 0;
+}
+/* FOOTER STYLE */
+footer p {
+    color: var(--primary-color);
+    line-height: 50px;
+    text-align: center;
+    align-items: center;
+    padding: 0 20px;
+}
+footer p::selection {
+    color: var(--hover-color);
+}
+footer a {
+    text-decoration: none; /* remove default underline */
+    color: inherit; /* inherits color of surrounding text instead of default blue */
+}
+footer a:hover {
+    color: var(--hover-color);
+}
+/* END FOOTER STYLE */
