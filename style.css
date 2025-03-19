@@ -56,6 +56,47 @@ header {
 }
 /* END HEADER STYLE */
 
+/* DESCRIPTION STYLE */
+.description  {
+    background-color: var(--background-color-1);
+    font-size: x-large;
+    font-weight: bolder;
+    padding: 80px;
+    display: flex; /* Make the section a flex container */
+}
+.description  h1 {
+    color: var(--primary-color);
+    font-size: 50px;
+    z-index: 1;
+}
+.description p {
+    color: var(--accent-color);
+    width: 80%;
+    text-align: justify;
+    z-index: 2;
+}
+.description img {
+    z-index:2;
+}
+.description button {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: 5px 15px;
+    margin-top: 75px;
+    margin-bottom: 0px;
+    margin-left: 20px;
+    border-radius: 5px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 40px;
+    font-weight: bold;
+}
+.description button:hover {
+
+    border: 3px solid var(--border-color);
+    font-size: 45px;
+}
+/* END DESCRIPTION STYLE */
+
 /* FOOTER STYLE */
  footer {
     background-color: var(--background-color-1);
