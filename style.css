@@ -1,10 +1,42 @@
-* {
-
-}
-
 :root {
-    --grey: rgb(129, 129, 129);
-
+    --primary-color: #7ed957;    /* Light bright green matching your logo */
+    --secondary-color: #f4a261;  /* Warm orange for a friendly, casual vibe */
+    --background-color-1: #264653;  /* Deep teal for header, providing contrast with the green logo */
+    --background-color-2: #fffaf0; /* Light cream for a welcoming background */
+    --text-color: #333333;       /* Neutral dark grey for easy-to-read text */
+    --accent-color: #2a9d8f;     /* Cool teal for some contrast and depth */
+    --border-color: #e0e0e0;     /* Soft grey for gentle borders */
+    --hover-color: #66bb6a;      /* Slightly darker green for hover effects */
+}
+@font-face {
+font-family: 'Quicksand';
+src: url('assets/fonts/Quicksand_Book.otf') format('opentype');
+}
+body {
+    background-color: var(--background-color-2);
+    font-family: 'Quicksand', sans-serif;
+    color:var(--text-color);
+    margin: 0;
+    bottom:0;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+p {
+    margin: 5px 20px;
+    padding: 5px;
+    color: var(--text-color);
+}
+section {
+    display: block;
+    background-color: var(--background-color-2);  /* Changed to match body */
+    height: 100vh;
+    margin-top: 10px;
+    margin-bottom: 200px;
+    z-index: 5;
+    width: 100%;
 }
 
 header {
