@@ -10,11 +10,6 @@ document.addEventListener('DOMContentLoaded', function ()
         const personText = "Person " + personCounter
         const personAttributeValue = personText.toLowerCase().replace(' ', '-');
 
-        //create a new div element
-        const formDivider = document.createElement('div');
-        //set attributes 
-        formDivider.setAttribute('class', 'form-divider');
-
         //create a new label element
         const personLabel = document.createElement('label');
         //create a new text node
@@ -22,21 +17,18 @@ document.addEventListener('DOMContentLoaded', function ()
         //append the text node to the label element
         personLabel.appendChild(personLabelText);
         //set attributes
-        personLabel.setAttribute('for', personText);
+        personLabel.setAttribute('for', personAttributeValue);
 
         //create a new input element
         const personInput = document.createElement('input');
         //set attributes
         personInput.setAttribute('type', 'text');
-        personInput.setAttribute('name', personText);
-        personInput.setAttribute('id', personText);
+        personInput.setAttribute('name', personAttributeValue);
+        personInput.setAttribute('id', personAttributeValue);
 
-        //append the label and input elements to the formDivider
-        formDivider.appendChild(personLabel);
-        formDivider.appendChild(personInput);
-
-        //append the formDivider to the person-form before the add person button
-        document.querySelector('#name-inputs').appendChild(formDivider);
+        //append the label and input to the person-form before the add person button
+        document.querySelector('#name-inputs').appendChild(personLabel);
+        document.querySelector('#name-inputs').appendChild(personInput);
     })
 
 }) // end DOM Content Loaded
