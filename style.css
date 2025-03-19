@@ -143,7 +143,7 @@ form button {
     color: var(--text-color);
 }
 
-#addPerson {
+#add-person {
     background-color: var(--border-color);
 }
 /* END FORM STYLE */
