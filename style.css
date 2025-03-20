@@ -116,6 +116,10 @@ form {
     transform: translate( -50%);
 }
 
+#money-form {
+    display: none;
+}
+
 .input-container {
     width: 100%;
 }
