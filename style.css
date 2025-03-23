@@ -164,6 +164,7 @@ form button {
     text-align: center;
     font-size: 22px;
     font-weight: bold;
+    color: var(--text-color);
 }
 
 
