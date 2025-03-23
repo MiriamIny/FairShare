@@ -1,58 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () 
 {
-    // Removed unused variable 'nameForm'
+    // Removed unused variable 'contributors form'
     let personCounter = 2; //keeps track of how many people have been added
-
-    const names = Array.from(document.querySelectorAll('#name-inputs input')).map(input => input.value);
-
-    // add event listener to add person button
-    document.getElementById('add-person').addEventListener('click', function (e) 
-    {
-        e.preventDefault();
-        personCounter++; //keeps track of how many people have been added
-        const personText = "Person " + personCounter
-        const personAttributeValue = personText.toLowerCase().replace(' ', '-');
-
-        //create a new label element
-        const personLabel = addLabel(personText, personAttributeValue);
-
-        //create a new input element
-        const personInput = addInput('text', personAttributeValue, personAttributeValue);
-
-        //append the label and input to the person-form before the add person button
-        document.querySelector('#name-inputs').appendChild(personLabel);
-        document.querySelector('#name-inputs').appendChild(personInput);
-    })
-
-    // add event listener to the 'add-costs' button    
-    document.getElementById('add-cost').addEventListener('click', function (e)
-    {
-        e.preventDefault();
-
-        //hide the first form
-        document.getElementById('name-form').style.display = 'none';
-        document.getElementById('cost-form').style.display = 'flex';
-
-        //add the first cost input
-        addCostInput();
-
-
-    })
-
-    let costCounter = 1; //keeps track of how many costs have been added
-
-    document.getElementById('add-another-cost').addEventListener('click', function (e)
-    {
-        e.preventDefault();
-        
-        costCounter++;
-
-        /*const names = Array.from(document.querySelectorAll('#name-inputs input')).map(input => input.value);
-
-        const costInputsContainer = document.querySelector('#cost-inputs'); // Store the result of the DOM query*?*/
-        
-        addCostInput();
-});
 
     function addFieldset(fieldsetId){
         //create fieldset element
@@ -62,13 +11,14 @@ document.addEventListener('DOMContentLoaded', function ()
         return fieldsetName;
     }
 
-    function addInput(type, name, id){
+    function addInput(type, name, id, className){
         //create input element
         const input = document.createElement('input');
         //set attributes
         input.setAttribute('type', type);
         input.setAttribute('name', name);
         input.setAttribute('id', id);
+        input.setAttribute('class', className);
         return input;
     }   
 
@@ -94,12 +44,13 @@ document.addEventListener('DOMContentLoaded', function ()
         return legend;
     }
 
-    function addSelect(selectName, selectId){
+    function addSelect(selectName, selectId, selectClass){
         //create select element
         const costSelect = document.createElement('select');
         //set attributes
         costSelect.setAttribute('name', selectName);
         costSelect.setAttribute('id', selectId); 
+        costSelect.setAttribute('class', selectClass);
         return costSelect;       
     }
     function addOption(name){
@@ -115,12 +66,57 @@ document.addEventListener('DOMContentLoaded', function ()
         return costOption;    
     }
 
+    // add event listener to add person button
+    document.getElementById('add-person').addEventListener('click', function (e) 
+    {
+        e.preventDefault();
+        personCounter++; //keeps track of how many people have been added
+        const personText = "Person " + personCounter
+        const personAttributeValue = personText.toLowerCase().replace(' ', '-');
+
+        //create a new label element
+        const personLabel = addLabel(personText, personAttributeValue);
+
+        //create a new input element
+        const personInput = addInput('text', personAttributeValue, personAttributeValue, 'contributor-name');
+
+        //append the label and input to the person-form before the add person button
+        document.querySelector('#contributors-inputs').appendChild(personLabel);
+        document.querySelector('#contributors-inputs').appendChild(personInput);
+    })
+
+    // add event listener to the 'add-costs' button    
+    document.getElementById('add-cost').addEventListener('click', function (e)
+    {
+        e.preventDefault();
+
+        //hide the first form
+        document.getElementById('contributors-form').style.display = 'none';
+        document.getElementById('cost-form').style.display = 'flex';
+
+        //add the first cost input
+        addCostInput();
+
+
+    })
+
+    let costCounter = 1; //keeps track of how many costs have been added
+
+    document.getElementById('add-another-cost').addEventListener('click', function (e)
+    {
+        e.preventDefault();
+        
+        costCounter++;
+        
+        addCostInput();
+});
+
     function addCostInput() {
         //get the cost inputs container
         const costInputsContainer = document.querySelector('#cost-inputs');
         
         //get all the inputs
-        const names = Array.from(document.querySelectorAll('#name-inputs input')).map(input => input.value); // Used in the loop below
+        const contributors = Array.from(document.querySelectorAll('#contributors-inputs input')).map(input => input.value); // Used in the loop below
 
         //add fieldset element
         const costFieldset = addFieldset('cost-' + costCounter);
@@ -132,26 +128,26 @@ document.addEventListener('DOMContentLoaded', function ()
         const costLabel = addLabel('Description', 'cost-description-' + costCounter);
 
         //add input element
-        const costInput = addInput('text', 'cost-description-' + costCounter, 'cost-description-' + costCounter);
+        const costInput = addInput('text', 'cost-description-' + costCounter, 'cost-description-' + costCounter, 'cost-description');
 
         //add label element
         const costLabel2 = addLabel('Amount', 'cost-' + costCounter + '-amount');
         
         //add input element
-        const costInput2 = addInput('number', 'cost-' + costCounter + '-amount', 'cost-' + costCounter + '-amount');
+        const costInput2 = addInput('number', 'cost-' + costCounter + '-amount', 'cost-' + costCounter + '-amount', 'cost-amount');
 
         //add label element
         const costLabel3 = addLabel('Who payed', 'cost-' + costCounter + '-person');
 
         //add select element
-        const costSelect = addSelect('cost-' + costCounter + '-person', 'cost-' + costCounter + '-person');
+        const costSelect = addSelect('cost-' + costCounter + '-person', 'cost-' + costCounter + '-person', 'cost-contributor');
 
         //create options
         // Iterate over the names array to create options for the select element
-        for (let name of names)
+        for (let contributor of contributors)
         {
             //add option element
-            const costOption = addOption(name);
+            const costOption = addOption(contributor);
             //append option to select element
             costSelect.appendChild(costOption);
         }
