@@ -117,16 +117,15 @@ form {
     transform: translate( -50%);
 }
 
-#cost-form {
-    display: none;
-}
-
 .input-container {
     width: 100%;
 }
 
 label {
     display: block;
+    text-align: left;
+    font-size: 18px;
+    font-weight: normal;
 }
 
 input, select {
@@ -135,6 +134,10 @@ input, select {
     margin-bottom: 20px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
+}
+
+select {
+    width: 450px;
 }
 
 form button {
@@ -150,6 +153,26 @@ form button {
 
 #add-person, #add-another-cost {
     background-color: var(--border-color);
+}
+
+#cost-form {
+    display: none;
+}
+
+#cost-form fieldset {
+    border: none;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+
+form button:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form button:active {
+    background-color: var(--hover-color);
 }
 /* END FORM STYLE */
 
