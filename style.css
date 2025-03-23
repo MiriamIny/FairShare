@@ -97,6 +97,29 @@ header {
 }
 /* END DESCRIPTION STYLE */
 
+/* INSTRUCTIONS STYLE */
+.instructions {
+    background-color: var(--background-color-2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    line-height: 40px;
+}
+
+.instructions h2 {
+    color: var(--primary-color);
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+strong {
+    color: var(--secondary-color);
+    font-size: 20px;
+}
+/* END INSTRUCTIONS STYLE */
+
 /* FOOTER STYLE */
  footer {
     background-color: var(--background-color-1);
