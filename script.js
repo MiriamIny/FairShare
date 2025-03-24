@@ -84,6 +84,9 @@ document.addEventListener('DOMContentLoaded', function ()
         Array.from(document.getElementsByClassName('description')).forEach(element => {
             element.style.display = 'none';
         });
+        Array.from(document.getElementsByClassName('instructions')).forEach(element => {
+            element.style.display = 'none';
+        })
     });
 
     // Function to add a person to the list
@@ -150,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function ()
 
         //add label element
         const costLabel3 = addLabel('Who payed', 'cost-' + costCounter + '-person');
+        
         //add select element
         const costSelect = addSelect('cost-' + costCounter + '-person', 'cost-' + costCounter + '-person', 'cost-contributor');
 
@@ -261,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function ()
 
         // Display the results
         displayResults(transactions, lenders, debtors, neutrals);
-    }
+    } // end calculateBill
 
     // Function to minimize transactions between debtors and lenders
     function minimizeTransactions(debtors, lenders) {
@@ -400,7 +404,7 @@ document.addEventListener('DOMContentLoaded', function ()
             resultDiv.appendChild(neutralsDiv);
             resultDiv.appendChild(debtorsDiv);        
         }
-    }
+    } // end display results
     
     // Function to display specific transactions for a person
     function showTransactionsForPerson(person, transactions, link) {
@@ -415,11 +419,6 @@ document.addEventListener('DOMContentLoaded', function ()
             // Append each transaction as a new paragraph under the transaction details section
             link.parentNode.insertBefore(transactionElement, link.nextSibling); // Insert before the next sibling of the link
         });
-    }
-
-        Array.from(document.getElementsByClassName('instructions')).forEach(element => {
-            element.style.display = 'none';
-        });
-    });
+    } // end showTransactionsForPerson
 
 });// end DOM Content Loaded
