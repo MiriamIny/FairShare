@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () 
 {
-    // Removed unused variable 'contributors form'
     let personCounter = 2; //keeps track of how many people have been added
 
     function addFieldset(fieldsetId){
@@ -65,6 +64,10 @@ document.addEventListener('DOMContentLoaded', function ()
         //return the option element
         return costOption;    
     }
+    // document event listeners
+
+    // Event listener for calculating the bill
+    document.getElementById("calculate").addEventListener("click", calculateBill);
 
     // add event listener to add person button
     document.getElementById('add-person').addEventListener('click', function (e) 
@@ -89,6 +92,11 @@ document.addEventListener('DOMContentLoaded', function ()
     document.getElementById('add-cost').addEventListener('click', function (e)
     {
         e.preventDefault();
+
+        if (!validateContributors()) {
+            alert('Please make sure that contributors are all filled out before adding costs.');
+            return;
+        }
 
         //hide the first form
         document.getElementById('contributors-form').style.display = 'none';
@@ -166,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function ()
         costInputsContainer.appendChild(costFieldset);
     }
 
+
     // form validation
     document.addEventListener('input', function (e) {
         if (e.target.classList.contains('cost-amount')) {
@@ -180,4 +189,160 @@ document.addEventListener('DOMContentLoaded', function ()
     
 
 
-}) // end DOM Content Loaded
+    // Function to validate that contributors have been added
+    function validateContributors() {
+        const contributors = document.querySelectorAll('#contributors-inputs input');
+        for (let contributor of contributors) {
+            if (contributor.value.trim() === '') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Function to validate cost inputs
+    function validateCosts() {
+        const costs = document.querySelectorAll('#cost-inputs fieldset');
+        for (let cost of costs) {
+            const amount = parseFloat(cost.querySelector('.cost-amount').value);
+            if (isNaN(amount) || amount <= 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Function to calculate the final bill and split the costs
+    function calculateBill(e) {
+        e.preventDefault(); // Prevent form from submitting
+        
+        if (!validateCosts()) {
+            alert('Please enter a valid amount for each cost.');
+            return;
+        }
+
+        let shares = new Map(); // Each person's share
+        let payments = new Map(); // How much each person paid
+        let people = [...document.querySelectorAll('#contributors-inputs input')].map(input => input.value); // List of people
+
+        // Initialize shares and payments for each person
+        people.forEach(person => {
+            shares.set(person, 0);
+            payments.set(person, 0);
+        });
+
+        // Calculate payments and shares based on cost inputs
+        let costItems = document.querySelectorAll('#cost-inputs fieldset');
+        costItems.forEach(costItem => {
+            let cost = parseFloat(costItem.querySelector('.cost-amount').value);
+            let contributor = costItem.querySelector('.cost-contributor').value;
+            payments.set(contributor, (payments.get(contributor)) + cost); // Update payment for the contributor
+            let share = cost / people.length; // Split cost evenly among all participants
+            /* Developer Note: The share is calculated per cost as opposed to total/people since we want to add 
+            the ability to split costs between specified users instead of automtically split between everyone. */
+                people.forEach(person => {
+                shares.set(person, (shares.get(person)) + share); // Add each person's share
+            });
+        });
+
+        // Calculate balances (how much each person owes or is owed)
+        let balances = [];
+        for (let person of people) {
+            let difference = payments.get(person) - shares.get(person); // Positive means they overpaid, negative means they owe
+            balances.push({ person: person, balance: difference });
+        }
+
+        // Separate debtors and lenders based on balance
+        let debtors= balance.filter(balance => balance<0);
+        let lenders = balance.filter(balance => balance>0); 
+        let neutrals = balance.filter(balance => balance===0); // Optional: handle neutral balances if needed
+        
+        // Sort debtors and lenders by the amount owed
+        lenders.sort((a, b) => b.balance - a.balance); // Largest creditors first
+        debtors.sort((a, b) => a.balance - b.balance); // Largest debtors first
+
+        // Minimize the number of transactions required to settle debts
+        let transactions = minimizeTransactions(debtors, lenders); //returns array of transaction strings
+
+        // Display the results
+        let resultDiv = document.getElementById('results');
+        resultDiv.textContent = ''; // Clear previous results
+        if (transactions.length === 0) {
+            resultDiv.textContent = 'No transactions needed. Everyone has paid their fair share.';
+        } else {
+            transactions.forEach(transaction => {
+                let transactionElement = document.createElement('p');
+                transactionElement.textContent = transaction;
+                resultDiv.appendChild(transactionElement);
+            });
+        }
+    }
+
+    // Function to minimize transactions between debtors and lenders
+    function minimizeTransactions(debtors, lenders) {
+        const transactions = [];
+
+        // Try to match each debtor with a lender
+        for (let d = 0; d < debtors.length;) {
+            let debtor = debtors[d];
+            let matched = false;
+            for (let l = 0; l < lenders.length; l++) {
+                let lender = lenders[l];
+                if (Math.abs(debtor.balance) === lender.balance) {
+                    transactions.push(`${debtor.person} pays ${lender.person} $${Math.abs(debtor.balance).toFixed(2)}`);
+                    lenders.splice(l, 1); // Remove lender
+                    debtors.splice(d, 1); // Remove debtor
+                    matched = true;
+                    break; // l was removed from lenders so we do not increment l, we want it to remain in the same position for the next iteration
+                }
+            }
+            if (!matched) {
+                d++; // Move to the next debtor if no match found
+            }
+        }
+
+        // Check for combined debtors who can pay one lender
+        let combinationsChecked = false;
+        for (let i = 0; i < debtors.length; i++) {
+            for (let j = i + 1; j < debtors.length; j++) {
+                let combinedDebt = debtors[i].balance + debtors[j].balance;
+                for (let lender of lenders) {
+                    if (Math.abs(combinedDebt) === lender.balance) {
+                        // Push two transactions for each debtor paying the lender
+                        transactions.push(`${debtors[i].person} pays ${lender.person} $${Math.abs(debtors[i].balance).toFixed(2)}`);
+                        transactions.push(`${debtors[j].person} pays ${lender.person} $${Math.abs(debtors[j].balance).toFixed(2)}`);
+        
+                        debtors.splice(i, 1); // Remove first debtor
+                        debtors.splice(j - 1, 1); // Adjust index after removal
+                        lenders.splice(lenders.indexOf(lender), 1); // Remove lender
+                        combinationsChecked = true;
+                        break;
+                    }
+                }
+                if (combinationsChecked) break;
+            }
+            if (combinationsChecked) break;
+        }
+
+        // Process remaining debtors and lenders
+        let d = 0, l = 0;
+        while (d < debtors.length && l < lenders.length) {
+            let debtor = debtors[d];
+            let lender = lenders[l];
+            // Calculate transfer amount based on the smaller of the two balances
+            // This ensures that we do not transfer more than either needs to settle
+            let transferAmount = Math.min(-debtor.balance, lender.balance); 
+
+            transactions.push(`${debtor.person} pays ${lender.person} $${transferAmount.toFixed(2)}`); // Record transaction
+            
+            debtor.balance += transferAmount; // Update debtor's balance
+            lender.balance -= transferAmount; // Update lender's balance
+
+            // Move to the next debtor or lender if their balance is settled
+            if (debtor.balance === 0) d++;
+            if (lender.balance === 0) l++;
+        }
+
+        return transactions; // Return the list of transactions
+    }// end minimizeTransactions
+});// end DOM Content Loaded
