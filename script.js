@@ -22,24 +22,33 @@ document.addEventListener('DOMContentLoaded', function ()
 
     // Function to create and return a label element with the provided text
     function addLabel(displayText, forAttribute){
+        //create a new label element
         const label = document.createElement('label');
+        //create a new text node
         const labelText = document.createTextNode(displayText);
+        //append the text node to the label element
         label.appendChild(labelText);
+        //set attributes
         label.setAttribute('for', forAttribute);
         return label;
     }
 
     // Function to create and return a legend element
     function addLegend(displayText){
+        //create legend element
         const legend = document.createElement('legend');
+        //create text node
         const legendText = document.createTextNode(displayText);
+        //append text node to legend element
         legend.appendChild(legendText);
         return legend;
     }
 
     // Function to create and return a select element
     function addSelect(selectName, selectId, selectClass){
+        //create select element
         const costSelect = document.createElement('select');
+        //set attributes
         costSelect.setAttribute('name', selectName);
         costSelect.setAttribute('id', selectId); 
         costSelect.setAttribute('class', selectClass);
@@ -48,11 +57,16 @@ document.addEventListener('DOMContentLoaded', function ()
 
     // Function to create and return an option element
     function addOption(name){
+        //create option element
         const costOption = document.createElement('option');
+        //create text node
         const costOptionText = document.createTextNode(name);
+        //append text node to option element
         costOption.appendChild(costOptionText);
+        //set attributes
         costOption.setAttribute('value', name);    
-        return costOption;    
+        //return the option element
+        return costOption;      
     }
 
     // Event listener for adding a person
@@ -73,7 +87,9 @@ document.addEventListener('DOMContentLoaded', function ()
 
         // Create and append label and input for the new person
         const personLabel = addLabel(personText, personAttributeValue);
+        //create a new input element
         const personInput = addInput('text', personAttributeValue, personAttributeValue, 'contributor-name');
+        //append the label and input to the person-form before the add person button
         document.querySelector('#contributors-inputs').appendChild(personLabel);
         document.querySelector('#contributors-inputs').appendChild(personInput);
     }
@@ -81,6 +97,10 @@ document.addEventListener('DOMContentLoaded', function ()
     // Function to show the cost input form after contributors are added
     function initiateCosts (e) {
         e.preventDefault();
+        if (!validateContributors()) {
+            alert('Please make sure that contributors are all filled out before adding costs.');
+            return;
+        }
         document.getElementById('contributors-form').style.display = 'none'; // Hide contributors form
         document.getElementById('cost-form').style.display = 'flex'; // Show cost form
         addCostInput(); // Add the first cost input
@@ -95,17 +115,34 @@ document.addEventListener('DOMContentLoaded', function ()
 
     // Function to add a single cost input form
     function addCostInput() {
+        //get the cost inputs container
         const costInputsContainer = document.querySelector('#cost-inputs');
+        //get all the inputs
         const contributors = Array.from(document.querySelectorAll('#contributors-inputs input')).map(input => input.value); // Get contributors names
 
-        // Create the necessary form elements for cost input
+        //add fieldset element
         const costFieldset = addFieldset('cost-' + costCounter);
+
+        //add legend element
         const costLegend = addLegend('Cost ' + costCounter);
+
+        //add label element
         const costLabel = addLabel('Description', 'cost-description-' + costCounter);
+
+        //add input element
         const costInput = addInput('text', 'cost-description-' + costCounter, 'cost-description-' + costCounter, 'cost-description');
+
+        //add label element
         const costLabel2 = addLabel('Amount', 'cost-' + costCounter + '-amount');
+        
+        //add input element
         const costInput2 = addInput('number', 'cost-' + costCounter + '-amount', 'cost-' + costCounter + '-amount', 'cost-amount');
+        //add step attribute
+        costInput2.setAttribute('step', '0.01');
+
+        //add label element
         const costLabel3 = addLabel('Who payed', 'cost-' + costCounter + '-person');
+        //add select element
         const costSelect = addSelect('cost-' + costCounter + '-person', 'cost-' + costCounter + '-person', 'cost-contributor');
 
         // Add options for each contributor to the select element
@@ -127,9 +164,52 @@ document.addEventListener('DOMContentLoaded', function ()
         costInputsContainer.appendChild(costFieldset);
     }
 
+    // form validation
+    document.addEventListener('input', function (e) {
+        if (e.target.classList.contains('cost-amount')) {
+            let value = e.target.value;
+    
+            // Allow only numbers with up to two decimal places
+            if (!/^\d+(\.\d{0,2})?$/.test(value)) {
+                e.target.value = value.slice(0, -1); // Remove last invalid character
+            }
+        }
+    });
+    
+
+
+    // Function to validate that contributors have been added
+    function validateContributors() {
+        const contributors = document.querySelectorAll('#contributors-inputs input');
+        for (let contributor of contributors) {
+            if (contributor.value.trim() === '') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Function to validate cost inputs
+    function validateCosts() {
+        const costs = document.querySelectorAll('#cost-inputs fieldset');
+        for (let cost of costs) {
+            const amount = parseFloat(cost.querySelector('.cost-amount').value);
+            if (isNaN(amount) || amount <= 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // Function to calculate the final bill and split the costs
     function calculateBill(e) {
         e.preventDefault(); // Prevent form from submitting
+
+        if (!validateCosts()) {
+            alert('Please enter a valid amount for each cost.');
+            return;
+        }
+        
         let shares = new Map(); // Each person's share
         let payments = new Map(); // How much each person paid
         let people = [...document.querySelectorAll('#contributors-inputs input')].map(input => input.value); // List of people
