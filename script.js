@@ -243,6 +243,7 @@ document.addEventListener('DOMContentLoaded', function ()
                     debtors.splice(d, 1); // Remove debtor
                     matched = true;
                     break; // l was removed from lenders so we do not increment l, we want it to remain in the same position for the next iteration
+                }
             }
             if (!matched) {
                 d++; // Move to the next debtor if no match found
@@ -290,6 +291,5 @@ document.addEventListener('DOMContentLoaded', function ()
         }
 
         return transactions; // Return the list of transactions
-        }
-    } // end minimizeTransactions
+    }// end minimizeTransactions
 });// end DOM Content Loaded
