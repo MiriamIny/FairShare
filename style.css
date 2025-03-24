@@ -12,6 +12,10 @@
 font-family: 'Quicksand';
 src: url('assets/fonts/Quicksand_Book.otf') format('opentype');
 }
+::selection {
+    color: none;
+    background: none;
+}
 body {
     background-color: var(--background-color-2);
     font-family: 'Quicksand', sans-serif;
@@ -108,17 +112,22 @@ header {
     justify-content: center;
     padding: 20px;
     line-height: 40px;
+    color: var(--text-color)
 }
-
+.instructions ::selection{
+    color: var(--hover-color);
+}
 .instructions h2 {
     color: var(--primary-color);
     font-size: 30px;
     margin-bottom: 20px;
 }
-
-strong {
+.instructions strong {
     color: var(--secondary-color);
     font-size: 20px;
+}
+.instructions strong::selection {
+    color: var(--accent-color);
 }
 /* END INSTRUCTIONS STYLE */
 
@@ -213,6 +222,11 @@ form button:active {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#results ::selection {
+    color: var(--text-color);
+    background-color: #f4a261;
 }
 
 #results h2 {
