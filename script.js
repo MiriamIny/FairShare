@@ -130,7 +130,6 @@ document.addEventListener('DOMContentLoaded', function ()
     // Function to calculate the final bill and split the costs
     function calculateBill(e) {
         e.preventDefault(); // Prevent form from submitting
-        console.log('Calculate button clicked');
         let shares = new Map(); // Each person's share
         let payments = new Map(); // How much each person paid
         let people = [...document.querySelectorAll('#contributors-inputs input')].map(input => input.value); // List of people
