@@ -39,9 +39,9 @@ p {
 section {
     display: block;
     background-color: var(--background-color-2);  /* Changed to match body */
-    height: 100vh;
     margin-top: 10px;
-    margin-bottom: 550px;
+    margin-bottom: 50px;
+    bottom: 50px;
     z-index: 5;
     width: 100%;
 }
@@ -289,3 +289,47 @@ footer a:hover {
     color: var(--hover-color);
 }
 /* END FOOTER STYLE */
+
+/* PRIVACY POLICY STYLE */
+.privacy-policy {
+    background-color: var(--background-color-2); /* Matches the overall background */
+    padding: 30px;
+    margin: 20px auto;
+    margin-bottom: 50px; 
+    width: 80%;
+    max-width: 800px;
+}
+
+.privacy-policy h2 {
+    color: var(--primary-color);
+    font-size: 28px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.privacy-policy p {
+    color: var(--text-color);
+    font-size: 18px;
+    text-align: justify;
+}
+
+.privacy-policy strong {
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.privacy-policy summary {
+    font-weight: bold;
+    color: var(--accent-color);
+    text-align: center;
+    margin-top: 20px;
+    list-style: none; /* Remove bullet point */
+}
+
+.privacy-policy p::selection, 
+.privacy-policy h2::selection, 
+.privacy-policy strong::selection {
+    background-color: var(--hover-color); /* Highlight text with hover color */
+    color: var(--text-color);
+}
+/* END PRIVACY POLICY STYLE */
