@@ -341,6 +341,7 @@ document.addEventListener('DOMContentLoaded', function ()
             element.style.display = 'none';
         });
 
+
         let resultDiv = document.getElementById('results');
         resultDiv.textContent = ''; // Clear previous results
 
@@ -415,5 +416,10 @@ document.addEventListener('DOMContentLoaded', function ()
             link.parentNode.insertBefore(transactionElement, link.nextSibling); // Insert before the next sibling of the link
         });
     }
+
+        Array.from(document.getElementsByClassName('instructions')).forEach(element => {
+            element.style.display = 'none';
+        });
+    });
 
 });// end DOM Content Loaded
