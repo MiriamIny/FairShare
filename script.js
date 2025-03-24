@@ -341,5 +341,8 @@ document.addEventListener('DOMContentLoaded', function ()
         Array.from(document.getElementsByClassName('description')).forEach(element => {
             element.style.display = 'none';
         });
+        Array.from(document.getElementsByClassName('instructions')).forEach(element => {
+            element.style.display = 'none';
+        });
     });
 });// end DOM Content Loaded
