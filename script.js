@@ -175,8 +175,6 @@ document.addEventListener('DOMContentLoaded', function ()
             }
         }
     });
-    
-
 
     // Function to validate that contributors have been added
     function validateContributors() {
@@ -254,87 +252,8 @@ document.addEventListener('DOMContentLoaded', function ()
         let transactions = minimizeTransactions(debtors, lenders, neutrals); //returns array of transaction strings
 
         // Display the results
-        displayResults(transactions);
+        displayResults(transactions, lenders, debtors, neutrals);
     }
-    function displayResults(transactions) {
-
-        let resultDiv = document.getElementById('results');
-        resultDiv.textContent = ''; // Clear previous results
-        
-        if (transactions.length === 0) {
-            resultDiv.textContent = 'No transactions needed. Everyone has paid their fair share.';
-        } 
-        else {
-
-            // Show summary
-            const summaryDiv = document.createElement('div');
-            summaryDiv.className = 'summary';
-            summaryDiv.innerHTML = `<h2>Bill Summary</h2>`;
-        
-            // Create lenders section
-            const lendersDiv = document.createElement('div');
-            lendersDiv.className = 'lenders';
-            lenders.forEach(lender => {
-                const lenderLink = document.createElement('a');
-                lenderLink.href = '#';
-                lenderLink.textContent = `${lender.person} (+$${lender.balance.toFixed(2)})`;
-                lenderLink.addEventListener('click', () => showTransactionsForPerson(lender.person, transactions));
-                lendersDiv.appendChild(lenderLink);
-                lendersDiv.appendChild(document.createElement('br'));
-            });
-        
-            // Create neutrals section
-            const neutralsDiv = document.createElement('div');
-            neutralsDiv.className = 'neutrals';
-            neutrals.forEach(neutral => {
-                const neutralDiv = document.createElement('p');
-                neutralDiv.textContent = `${neutral.person} $0.00`;
-                neutralsDiv.appendChild(neutralDiv);
-            });
-        
-            // Create debtors section
-            const debtorsDiv = document.createElement('div');
-            debtorsDiv.className = 'debtors';
-            debtors.forEach(debtor => {
-                const debtorLink = document.createElement('a');
-                debtorLink.href = '#';
-                debtorLink.textContent = `${debtor.person} (-$${Math.abs(debtor.balance).toFixed(2)})`;
-                debtorLink.addEventListener('click', () => showTransactionsForPerson(debtor.person, transactions));
-                debtorsDiv.appendChild(debtorLink);
-                debtorsDiv.appendChild(document.createElement('br'));
-            });
-        
-            // Append sections to the summary
-            summaryDiv.appendChild(lendersDiv);
-            summaryDiv.appendChild(neutralsDiv);
-            summaryDiv.appendChild(debtorsDiv);
-            resultDiv.appendChild(summaryDiv);
-        
-        }
-    }
-    
-    // Function to display specific transactions for a person
-    function showTransactionsForPerson(person, transactions) {
-        const filteredTransactions = transactions.filter(transaction => transaction.includes(person));
-    
-        let transactionDiv = document.getElementById('transaction-details');
-        if (!transactionDiv) {
-            transactionDiv = document.createElement('div');
-            transactionDiv.id = 'transaction-details';
-            document.getElementById('results').appendChild(transactionDiv);
-        }
-    
-        transactionDiv.textContent = ''; // Clear previous details
-        const title = document.createElement('h4');
-        title.textContent = `Transactions for ${person}`;
-        transactionDiv.appendChild(title);
-    
-        filteredTransactions.forEach(transaction => {
-            const transactionElement = document.createElement('p');
-            transactionElement.textContent = transaction;
-            transactionDiv.appendChild(transactionElement);
-        });
-    } // end displayResults
 
     // Function to minimize transactions between debtors and lenders
     function minimizeTransactions(debtors, lenders) {
@@ -403,4 +322,95 @@ document.addEventListener('DOMContentLoaded', function ()
 
         return transactions; // Return the list of transactions
     }// end minimizeTransactions
+
+    function displayResults(transactions, lenders, debtors, neutrals) {
+
+        let resultDiv = document.getElementById('results');
+        resultDiv.textContent = ''; // Clear previous results
+
+        // If no transactions exist, inform the user that everyone has paid their fair share
+        if (transactions.length === 0) {
+            resultDiv.textContent = 'No transactions needed. Everyone has paid their fair share.';
+        } 
+        else {
+
+            // Show summary
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = 'summary';
+            summaryDiv.innerHTML = `<h2>Bill Summary</h2>`;
+        
+            // Create lenders section
+            const lendersDiv = document.createElement('div');
+            lendersDiv.className = 'lenders';
+            lenders.forEach(lender => {
+                // For each lender, create a clickable link showing their name and balance
+                const lenderLink = document.createElement('a');
+                lenderLink.href = '#';
+                lenderLink.textContent = `${lender.person} (+$${lender.balance.toFixed(2)})`;
+                // Add an event listener to show the transactions for this lender when clicked
+                lenderLink.addEventListener('click', () => showTransactionsForPerson(lender.person, transactions));
+                lendersDiv.appendChild(lenderLink);
+                lendersDiv.appendChild(document.createElement('br'));
+            });
+        
+            // Create neutrals section
+            const neutralsDiv = document.createElement('div');
+            neutralsDiv.className = 'neutrals';
+            neutrals.forEach(neutral => {
+                // Display a message for each neutral person showing $0 balance
+                const neutralDiv = document.createElement('p');
+                neutralDiv.textContent = `${neutral.person} $0.00`;
+                neutralsDiv.appendChild(neutralDiv);
+            });
+        
+            // Create debtors section
+            const debtorsDiv = document.createElement('div');
+            debtorsDiv.className = 'debtors';
+            debtors.forEach(debtor => {
+                // For each debtor, create a clickable link showing their name and negative balance
+                const debtorLink = document.createElement('a');
+                debtorLink.href = '#';
+                debtorLink.textContent = `${debtor.person} (-$${Math.abs(debtor.balance).toFixed(2)})`;
+                // Add an event listener to show the transactions for this debtor when clicked
+                debtorLink.addEventListener('click', () => showTransactionsForPerson(debtor.person, transactions));
+                debtorsDiv.appendChild(debtorLink);
+                debtorsDiv.appendChild(document.createElement('br'));
+            });
+        
+            // Append lenders, neutrals, and debtors sections to the summary div
+            summaryDiv.appendChild(lendersDiv);
+            summaryDiv.appendChild(neutralsDiv);
+            summaryDiv.appendChild(debtorsDiv);
+            // Append the summary to the results div
+            resultDiv.appendChild(summaryDiv);
+        
+        }
+    }
+    
+    // Function to display specific transactions for a person
+    function showTransactionsForPerson(person, transactions) {
+
+        // Filter the transactions to include only those that involve the specified person
+        const filteredTransactions = transactions.filter(transaction => transaction.includes(person));
+        
+        // Check if the transaction details section already exists in the DOM
+        let transactionDiv = document.getElementById('transaction-details');
+        if (!transactionDiv) {
+            // If it doesn't exist, create a new div for displaying transaction details
+            transactionDiv = document.createElement('div');
+            transactionDiv.id = 'transaction-details';
+            document.getElementById('results').appendChild(transactionDiv);
+        }
+    
+        transactionDiv.textContent = ''; // Clear previous details
+
+        // For each filtered transaction, create a new paragraph element and display the transaction
+        filteredTransactions.forEach(transaction => {
+            const transactionElement = document.createElement('p');
+            transactionElement.textContent = transaction;
+            // Append each transaction as a new paragraph under the transaction details section
+            transactionDiv.appendChild(transactionElement);
+        });
+    }
+
 });// end DOM Content Loaded
