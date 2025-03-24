@@ -224,11 +224,11 @@ document.addEventListener('DOMContentLoaded', function ()
         // Show summary
         const summaryDiv = document.createElement('div');
         summaryDiv.className = 'summary';
+        summaryDiv.innerHTML = `<h2>Bill Summary</h2>`;
     
         // Create lenders section
         const lendersDiv = document.createElement('div');
         lendersDiv.className = 'lenders';
-        lendersDiv.innerHTML = `<h3>Lenders</h3>`;
         lenders.forEach(lender => {
             const lenderLink = document.createElement('a');
             lenderLink.href = '#';
