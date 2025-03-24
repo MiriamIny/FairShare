@@ -251,21 +251,90 @@ document.addEventListener('DOMContentLoaded', function ()
         debtors.sort((a, b) => a.balance - b.balance); // Largest debtors first
 
         // Minimize the number of transactions required to settle debts
-        let transactions = minimizeTransactions(debtors, lenders); //returns array of transaction strings
+        let transactions = minimizeTransactions(debtors, lenders, neutrals); //returns array of transaction strings
 
         // Display the results
+        displayResults(transactions);
+    }
+    function displayResults(transactions) {
+
         let resultDiv = document.getElementById('results');
         resultDiv.textContent = ''; // Clear previous results
+        
         if (transactions.length === 0) {
             resultDiv.textContent = 'No transactions needed. Everyone has paid their fair share.';
-        } else {
-            transactions.forEach(transaction => {
-                let transactionElement = document.createElement('p');
-                transactionElement.textContent = transaction;
-                resultDiv.appendChild(transactionElement);
+        } 
+        else {
+
+            // Show summary
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = 'summary';
+            summaryDiv.innerHTML = `<h2>Bill Summary</h2>`;
+        
+            // Create lenders section
+            const lendersDiv = document.createElement('div');
+            lendersDiv.className = 'lenders';
+            lenders.forEach(lender => {
+                const lenderLink = document.createElement('a');
+                lenderLink.href = '#';
+                lenderLink.textContent = `${lender.person} (+$${lender.balance.toFixed(2)})`;
+                lenderLink.addEventListener('click', () => showTransactionsForPerson(lender.person, transactions));
+                lendersDiv.appendChild(lenderLink);
+                lendersDiv.appendChild(document.createElement('br'));
             });
+        
+            // Create neutrals section
+            const neutralsDiv = document.createElement('div');
+            neutralsDiv.className = 'neutrals';
+            neutrals.forEach(neutral => {
+                const neutralDiv = document.createElement('p');
+                neutralDiv.textContent = `${neutral.person} $0.00`;
+                neutralsDiv.appendChild(neutralDiv);
+            });
+        
+            // Create debtors section
+            const debtorsDiv = document.createElement('div');
+            debtorsDiv.className = 'debtors';
+            debtors.forEach(debtor => {
+                const debtorLink = document.createElement('a');
+                debtorLink.href = '#';
+                debtorLink.textContent = `${debtor.person} (-$${Math.abs(debtor.balance).toFixed(2)})`;
+                debtorLink.addEventListener('click', () => showTransactionsForPerson(debtor.person, transactions));
+                debtorsDiv.appendChild(debtorLink);
+                debtorsDiv.appendChild(document.createElement('br'));
+            });
+        
+            // Append sections to the summary
+            summaryDiv.appendChild(lendersDiv);
+            summaryDiv.appendChild(neutralsDiv);
+            summaryDiv.appendChild(debtorsDiv);
+            resultDiv.appendChild(summaryDiv);
+        
         }
     }
+    
+    // Function to display specific transactions for a person
+    function showTransactionsForPerson(person, transactions) {
+        const filteredTransactions = transactions.filter(transaction => transaction.includes(person));
+    
+        let transactionDiv = document.getElementById('transaction-details');
+        if (!transactionDiv) {
+            transactionDiv = document.createElement('div');
+            transactionDiv.id = 'transaction-details';
+            document.getElementById('results').appendChild(transactionDiv);
+        }
+    
+        transactionDiv.textContent = ''; // Clear previous details
+        const title = document.createElement('h4');
+        title.textContent = `Transactions for ${person}`;
+        transactionDiv.appendChild(title);
+    
+        filteredTransactions.forEach(transaction => {
+            const transactionElement = document.createElement('p');
+            transactionElement.textContent = transaction;
+            transactionDiv.appendChild(transactionElement);
+        });
+    } // end displayResults
 
     // Function to minimize transactions between debtors and lenders
     function minimizeTransactions(debtors, lenders) {
