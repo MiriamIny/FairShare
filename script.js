@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function ()
 
         // Display the results
         displayResults(transactions, lenders, debtors, neutrals);
-    }
+    } // end calculateBill
 
     // Function to minimize transactions between debtors and lenders
     function minimizeTransactions(debtors, lenders) {
@@ -401,7 +401,7 @@ document.addEventListener('DOMContentLoaded', function ()
             resultDiv.appendChild(neutralsDiv);
             resultDiv.appendChild(debtorsDiv);        
         }
-    }
+    } // end display results
     
     // Function to display specific transactions for a person
     function showTransactionsForPerson(person, transactions, link) {
@@ -416,11 +416,6 @@ document.addEventListener('DOMContentLoaded', function ()
             // Append each transaction as a new paragraph under the transaction details section
             link.parentNode.insertBefore(transactionElement, link.nextSibling); // Insert before the next sibling of the link
         });
-    }
-
-        Array.from(document.getElementsByClassName('instructions')).forEach(element => {
-            element.style.display = 'none';
-        });
-    });
+    } // end showTransactionsForPerson
 
 });// end DOM Content Loaded
