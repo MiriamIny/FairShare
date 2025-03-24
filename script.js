@@ -360,8 +360,10 @@ document.addEventListener('DOMContentLoaded', function ()
                 lenderLink.href = '#';
                 lenderLink.textContent = `${lender.person} (+$${lender.balance.toFixed(2)})`;
                 // Add an event listener to show the transactions for this lender when clicked
-                lenderLink.addEventListener('click', () => showTransactionsForPerson(lender.person, transactions));
-                lendersDiv.appendChild(lenderLink);
+                lenderLink.addEventListener('click', () => {
+                    showTransactionsForPerson(lender.person, transactions);
+                    document.getElementById('transaction-details').scrollIntoView({ behavior: 'smooth' });
+                });                lendersDiv.appendChild(lenderLink);
                 lendersDiv.appendChild(document.createElement('br'));
             });
         
@@ -384,7 +386,10 @@ document.addEventListener('DOMContentLoaded', function ()
                 debtorLink.href = '#';
                 debtorLink.textContent = `${debtor.person} (-$${Math.abs(debtor.balance).toFixed(2)})`;
                 // Add an event listener to show the transactions for this debtor when clicked
-                debtorLink.addEventListener('click', () => showTransactionsForPerson(debtor.person, transactions));
+                debtorLink.addEventListener('click', () => {
+                    showTransactionsForPerson(debtor.person, transactions);
+                    document.getElementById('transaction-details').scrollIntoView({ behavior: 'smooth' });
+                });
                 debtorsDiv.appendChild(debtorLink);
                 debtorsDiv.appendChild(document.createElement('br'));
             });
@@ -413,6 +418,9 @@ document.addEventListener('DOMContentLoaded', function ()
             transactionDiv.id = 'transaction-details';
             document.getElementById('results').appendChild(transactionDiv);
         }
+
+        const scrollTo = document.getElementById('transaction-details');
+        scrollTo.scrollIntoView({ behavior: 'smooth' });
     
         transactionDiv.textContent = ''; // Clear previous details
 
