@@ -24,6 +24,7 @@ body {
     height: 100vh;
     position: relative;
     flex-direction: column;
+    height: 100%;
     width: 100%;
 }
 p {
@@ -36,7 +37,7 @@ section {
     background-color: var(--background-color-2);  /* Changed to match body */
     height: 100vh;
     margin-top: 10px;
-    margin-bottom: 200px;
+    margin-bottom: 550px;
     z-index: 5;
     width: 100%;
 }
@@ -45,7 +46,6 @@ header {
     background-color: var(--background-color-2);
     display: flex;
     align-items: center;
-    border-bottom: var(--border-color) 1px solid;
     padding-left: 20px;
 }
 .logo{
@@ -121,6 +121,7 @@ strong {
     font-size: 20px;
 }
 /* END INSTRUCTIONS STYLE */
+
 /* FORM STYLE */
 form {
     display: flex;
@@ -180,7 +181,7 @@ form button {
     background-color: var(--border-color);
 }
 
-#cost-form, #person-form {
+#cost-form, #person-form, #results {
     display: none;
 }
 
@@ -192,7 +193,6 @@ form button {
     color: var(--text-color);
 }
 
-
 form button:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -200,7 +200,52 @@ form button:hover {
 form button:active {
     background-color: var(--hover-color);
 }
-/* END FORM STYLE */
+/* END FORM STYLE */ 
+
+/* RESULTS STYLE */
+/* General Styles */
+#results {
+    margin: 20px;
+    font-family: 'Quicksand', sans-serif;
+    justify-content: center;
+    text-align: center;
+    background-color: var(--background-color-2);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#results h2 {
+    color: var(--accent-color);
+    text-align: center;
+}
+
+/* Lenders, Debtors, and Neutrals Styles */
+.lenders, .debtors, .neutrals {
+    margin: 0 auto;
+    text-align: center;
+    margin: 5px;}
+.lenders a {
+    color: var(--primary-color);
+}
+.debtors a {
+    color: rgb(202, 41, 41);
+}
+.lenders a, .debtors a {
+    display: block;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 5px;
+}
+.lenders a:hover, .debtors a:hover {
+    color: var(--accent-color);
+}
+.neutrals p {
+    color: var(--text-color);
+    font-style: italic;
+}
+
+/*END RESULTS STYLE */
 
 /* FOOTER STYLE */
  footer {
