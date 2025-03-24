@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function ()
     // Function to calculate the final bill and split the costs
     function calculateBill(e) {
         e.preventDefault(); // Prevent form from submitting
+        console.log('Calculate button clicked');
         let shares = new Map(); // Each person's share
         let payments = new Map(); // How much each person paid
         let people = [...document.querySelectorAll('#contributors-inputs input')].map(input => input.value); // List of people
@@ -162,9 +163,9 @@ document.addEventListener('DOMContentLoaded', function ()
         }
 
         // Separate debtors and lenders based on balance
-        let debtors = balances.filter(balanceObj => balanceObj.balance < 0);
-        let lenders = balances.filter(balanceObj => balanceObj.balance > 0);
-        let neutrals = balances.filter(balanceObj => balanceObj.balance === 0); // Optional: handle neutral balances if needed
+        let debtors= balances.filter(balanceObj => balanceObj.balance<0);
+        let lenders = balances.filter(balanceObj => balanceObj.balance>0); 
+        let neutrals = balances.filter(balanceObj => balanceObj.balance===0); // Optional: handle neutral balances if needed
         
         // Sort debtors and lenders by the amount owed
         lenders.sort((a, b) => b.balance - a.balance); // Largest creditors first
@@ -198,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function ()
             for (let l = 0; l < lenders.length; l++) {
                 let lender = lenders[l];
                 if (Math.abs(debtor.balance) === lender.balance) {
-                    transactions.push(${debtor.person} pays ${lender.person} $${Math.abs(debtor.balance).toFixed(2)});
+                    transactions.push(`${debtor.person} pays ${lender.person} $${Math.abs(debtor.balance).toFixed(2)}`);
                     lenders.splice(l, 1); // Remove lender
                     debtors.splice(d, 1); // Remove debtor
                     matched = true;
@@ -218,8 +219,8 @@ document.addEventListener('DOMContentLoaded', function ()
                 for (let lender of lenders) {
                     if (Math.abs(combinedDebt) === lender.balance) {
                         // Push two transactions for each debtor paying the lender
-                        transactions.push(${debtors[i].person} pays ${lender.person} $${Math.abs(debtors[i].balance).toFixed(2)});
-                        transactions.push(${debtors[j].person} pays ${lender.person} $${Math.abs(debtors[j].balance).toFixed(2)});
+                        transactions.push(`${debtors[i].person} pays ${lender.person} $${Math.abs(debtors[i].balance).toFixed(2)}`);
+                        transactions.push(`${debtors[j].person} pays ${lender.person} $${Math.abs(debtors[j].balance).toFixed(2)}`);
         
                         debtors.splice(i, 1); // Remove first debtor
                         debtors.splice(j - 1, 1); // Adjust index after removal
@@ -242,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function ()
             // This ensures that we do not transfer more than either needs to settle
             let transferAmount = Math.min(-debtor.balance, lender.balance); 
 
-            transactions.push(${debtor.person} pays ${lender.person} $${transferAmount.toFixed(2)}); // Record transaction
+            transactions.push(`${debtor.person} pays ${lender.person} $${transferAmount.toFixed(2)}`); // Record transaction
             
             debtor.balance += transferAmount; // Update debtor's balance
             lender.balance -= transferAmount; // Update lender's balance
