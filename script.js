@@ -163,9 +163,9 @@ document.addEventListener('DOMContentLoaded', function ()
         }
 
         // Separate debtors and lenders based on balance
-        let debtors= balance.filter(balance => balance<0);
-        let lenders = balance.filter(balance => balance>0); 
-        let neutrals = balance.filter(balance => balance===0); // Optional: handle neutral balances if needed
+        let debtors= balances.filter(balanceObj => balanceObj.balance<0);
+        let lenders = balances.filter(balanceObj => balanceObj.balance>0); 
+        let neutrals = balances.filter(balanceObj => balanceObj.balance===0); // Optional: handle neutral balances if needed
         
         // Sort debtors and lenders by the amount owed
         lenders.sort((a, b) => b.balance - a.balance); // Largest creditors first
