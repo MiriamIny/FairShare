@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () 
 {
-    // Removed unused variable 'contributors form'
     let personCounter = 2; //keeps track of how many people have been added
 
     function addFieldset(fieldsetId){
@@ -94,6 +93,11 @@ document.addEventListener('DOMContentLoaded', function ()
     {
         e.preventDefault();
 
+        if (!validateContributors()) {
+            alert('Please make sure that contributors are all filled out before adding costs.');
+            return;
+        }
+
         //hide the first form
         document.getElementById('contributors-form').style.display = 'none';
         document.getElementById('cost-form').style.display = 'flex';
@@ -167,9 +171,39 @@ document.addEventListener('DOMContentLoaded', function ()
         //append the fieldset to the cost-form div
         costInputsContainer.appendChild(costFieldset);
     }
+
+    // Function to validate that contributors have been added
+    function validateContributors() {
+        const contributors = document.querySelectorAll('#contributors-inputs input');
+        for (let contributor of contributors) {
+            if (contributor.value.trim() === '') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Function to validate cost inputs
+    function validateCosts() {
+        const costs = document.querySelectorAll('#cost-inputs fieldset');
+        for (let cost of costs) {
+            const amount = parseFloat(cost.querySelector('.cost-amount').value);
+            if (isNaN(amount) || amount <= 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // Function to calculate the final bill and split the costs
     function calculateBill(e) {
         e.preventDefault(); // Prevent form from submitting
+        
+        if (!validateCosts()) {
+            alert('Please enter a valid amount for each cost.');
+            return;
+        }
+
         let shares = new Map(); // Each person's share
         let payments = new Map(); // How much each person paid
         let people = [...document.querySelectorAll('#contributors-inputs input')].map(input => input.value); // List of people
