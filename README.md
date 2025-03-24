@@ -17,3 +17,5 @@
 ##### 4. Fill in the form adding a description, price, and payer for each cost
 #####   - click the Add Cost button to add costs as needed
 ##### 5. Finally click the Split it! button to calculate who owes whom and how much
+
+###### Fair Share Website link: miriaminy.github.io/FairShare/
