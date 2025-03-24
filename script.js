@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function ()
         }
 
         // Separate debtors and lenders based on balance
-        let debtors= balances.filter(balanceObj => balanceObj.balance<0);
+        let debtors = balances.filter(balanceObj => balanceObj.balance < 0);
         let lenders = balances.filter(balanceObj => balanceObj.balance>0); 
         let neutrals = balances.filter(balanceObj => balanceObj.balance===0); // Optional: handle neutral balances if needed
         
