@@ -65,6 +65,10 @@ document.addEventListener('DOMContentLoaded', function ()
         //return the option element
         return costOption;    
     }
+    // document event listeners
+
+    // Event listener for calculating the bill
+    document.getElementById("calculate").addEventListener("click", calculateBill);
 
     // add event listener to add person button
     document.getElementById('add-person').addEventListener('click', function (e) 
@@ -162,6 +166,65 @@ document.addEventListener('DOMContentLoaded', function ()
     
         //append the fieldset to the cost-form div
         costInputsContainer.appendChild(costFieldset);
+    }
+    // Function to calculate the final bill and split the costs
+    function calculateBill(e) {
+        e.preventDefault(); // Prevent form from submitting
+        let shares = new Map(); // Each person's share
+        let payments = new Map(); // How much each person paid
+        let people = [...document.querySelectorAll('#contributors-inputs input')].map(input => input.value); // List of people
+
+        // Initialize shares and payments for each person
+        people.forEach(person => {
+            shares.set(person, 0);
+            payments.set(person, 0);
+        });
+
+        // Calculate payments and shares based on cost inputs
+        let costItems = document.querySelectorAll('#cost-inputs fieldset');
+        costItems.forEach(costItem => {
+            let cost = parseFloat(costItem.querySelector('.cost-amount').value);
+            let contributor = costItem.querySelector('.cost-contributor').value;
+            payments.set(contributor, (payments.get(contributor)) + cost); // Update payment for the contributor
+            let share = cost / people.length; // Split cost evenly among all participants
+            /* Developer Note: The share is calculated per cost as opposed to total/people since we want to add 
+            the ability to split costs between specified users instead of automtically split between everyone. */
+                people.forEach(person => {
+                shares.set(person, (shares.get(person)) + share); // Add each person's share
+            });
+        });
+
+        // Calculate balances (how much each person owes or is owed)
+        let balances = [];
+        for (let person of people) {
+            let difference = payments.get(person) - shares.get(person); // Positive means they overpaid, negative means they owe
+            balances.push({ person: person, balance: difference });
+        }
+
+        // Separate debtors and lenders based on balance
+        let debtors= balance.filter(balance => balance<0);
+        let lenders = balance.filter(balance => balance>0); 
+        let neutrals = balance.filter(balance => balance===0); // Optional: handle neutral balances if needed
+        
+        // Sort debtors and lenders by the amount owed
+        lenders.sort((a, b) => b.balance - a.balance); // Largest creditors first
+        debtors.sort((a, b) => a.balance - b.balance); // Largest debtors first
+
+        // Minimize the number of transactions required to settle debts
+        let transactions = minimizeTransactions(debtors, lenders); //returns array of transaction strings
+
+        // Display the results
+        let resultDiv = document.getElementById('results');
+        resultDiv.textContent = ''; // Clear previous results
+        if (transactions.length === 0) {
+            resultDiv.textContent = 'No transactions needed. Everyone has paid their fair share.';
+        } else {
+            transactions.forEach(transaction => {
+                let transactionElement = document.createElement('p');
+                transactionElement.textContent = transaction;
+                resultDiv.appendChild(transactionElement);
+            });
+        }
     }
 
 
