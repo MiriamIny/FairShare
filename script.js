@@ -150,6 +150,7 @@ document.addEventListener('DOMContentLoaded', function ()
 
         //add label element
         const costLabel3 = addLabel('Who payed', 'cost-' + costCounter + '-person');
+        
         //add select element
         const costSelect = addSelect('cost-' + costCounter + '-person', 'cost-' + costCounter + '-person', 'cost-contributor');
 
