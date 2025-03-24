@@ -248,16 +248,16 @@ document.addEventListener('DOMContentLoaded', function ()
         }
 
         // Separate debtors and lenders based on balance
-        let debtors = balances.filter(balanceObj => balanceObj.balance < 0);
-        let lenders = balances.filter(balanceObj => balanceObj.balance>0); 
-        let neutrals = balances.filter(balanceObj => balanceObj.balance===0); // Optional: handle neutral balances if needed
+        const debtors = balances.filter(balanceObj => balanceObj.balance < 0);
+        const lenders = balances.filter(balanceObj => balanceObj.balance>0); 
+        const neutrals = balances.filter(balanceObj => balanceObj.balance===0); // Optional: handle neutral balances if needed
         
         // Sort debtors and lenders by the amount owed
         lenders.sort((a, b) => b.balance - a.balance); // Largest creditors first
         debtors.sort((a, b) => a.balance - b.balance); // Largest debtors first
 
         // Minimize the number of transactions required to settle debts
-        let transactions = minimizeTransactions(debtors, lenders, neutrals); //returns array of transaction strings
+        let transactions = minimizeTransactions(debtors, lenders); //returns array of transaction strings
 
         // Display the results
         displayResults(transactions, lenders, debtors, neutrals);
@@ -265,18 +265,21 @@ document.addEventListener('DOMContentLoaded', function ()
 
     // Function to minimize transactions between debtors and lenders
     function minimizeTransactions(debtors, lenders) {
+
+        const debtorsList= [...debtors]; // Copy debtors list to avoid modifying the original
+        const lendersList = [...lenders]; // Copy lenders list to avoid modifying the original
         const transactions = [];
 
         // Try to match each debtor with a lender
-        for (let d = 0; d < debtors.length;) {
-            let debtor = debtors[d];
+        for (let d = 0; d < debtorsList.length;) {
+            let debtor = debtorsList[d];
             let matched = false;
-            for (let l = 0; l < lenders.length; l++) {
-                let lender = lenders[l];
+            for (let l = 0; l < lendersList.length; l++) {
+                let lender = lendersList[l];
                 if (Math.abs(debtor.balance) === lender.balance) {
                     transactions.push(`${debtor.person} pays ${lender.person} $${Math.abs(debtor.balance).toFixed(2)}`);
-                    lenders.splice(l, 1); // Remove lender
-                    debtors.splice(d, 1); // Remove debtor
+                    lendersList.splice(l, 1); // Remove lender
+                    debtorsList.splice(d, 1); // Remove debtor
                     matched = true;
                     break; // l was removed from lenders so we do not increment l, we want it to remain in the same position for the next iteration
                 }
@@ -288,18 +291,18 @@ document.addEventListener('DOMContentLoaded', function ()
 
         // Check for combined debtors who can pay one lender
         let combinationsChecked = false;
-        for (let i = 0; i < debtors.length; i++) {
-            for (let j = i + 1; j < debtors.length; j++) {
-                let combinedDebt = debtors[i].balance + debtors[j].balance;
-                for (let lender of lenders) {
+        for (let i = 0; i < debtorsList.length; i++) {
+            for (let j = i + 1; j < debtorsList.length; j++) {
+                let combinedDebt = debtorsList[i].balance + debtorsList[j].balance;
+                for (let lender of lendersList) {
                     if (Math.abs(combinedDebt) === lender.balance) {
                         // Push two transactions for each debtor paying the lender
-                        transactions.push(`${debtors[i].person} pays ${lender.person} $${Math.abs(debtors[i].balance).toFixed(2)}`);
-                        transactions.push(`${debtors[j].person} pays ${lender.person} $${Math.abs(debtors[j].balance).toFixed(2)}`);
+                        transactions.push(`${debtorsList[i].person} pays ${lender.person} $${Math.abs(debtorsList[i].balance).toFixed(2)}`);
+                        transactions.push(`${debtorsList[j].person} pays ${lender.person} $${Math.abs(debtorsList[j].balance).toFixed(2)}`);
         
-                        debtors.splice(i, 1); // Remove first debtor
-                        debtors.splice(j - 1, 1); // Adjust index after removal
-                        lenders.splice(lenders.indexOf(lender), 1); // Remove lender
+                        debtorsList.splice(i, 1); // Remove first debtor
+                        debtorsList.splice(j - 1, 1); // Adjust index after removal
+                        lendersList.splice(lendersList.indexOf(lender), 1); // Remove lender
                         combinationsChecked = true;
                         break;
                     }
@@ -311,9 +314,9 @@ document.addEventListener('DOMContentLoaded', function ()
 
         // Process remaining debtors and lenders
         let d = 0, l = 0;
-        while (d < debtors.length && l < lenders.length) {
-            let debtor = debtors[d];
-            let lender = lenders[l];
+        while (d < debtorsList.length && l < lendersList.length) {
+            let debtor = debtorsList[d];
+            let lender = lendersList[l];
             // Calculate transfer amount based on the smaller of the two balances
             // This ensures that we do not transfer more than either needs to settle
             let transferAmount = Math.min(-debtor.balance, lender.balance); 
@@ -330,6 +333,7 @@ document.addEventListener('DOMContentLoaded', function ()
 
         return transactions; // Return the list of transactions
     }// end minimizeTransactions
+
     function displayResults(transactions, lenders, debtors, neutrals) {
 
         document.getElementById('results').style.display = 'block'; // Show results section
@@ -340,16 +344,15 @@ document.addEventListener('DOMContentLoaded', function ()
         let resultDiv = document.getElementById('results');
         resultDiv.textContent = ''; // Clear previous results
 
+        resultDiv.innerHTML = `<h2>Bill Summary</h2>`;
+
         // If no transactions exist, inform the user that everyone has paid their fair share
         if (transactions.length === 0) {
-            resultDiv.textContent = 'No transactions needed. Everyone has paid their fair share.';
+            const fairShareMsg = document.createElement('p');
+            fairShareMsg.textContent = 'No transactions needed. Everyone has paid their fair share.';
+            resultDiv.appendChild(fairShareMsg);
         } 
         else {
-
-            // Show summary
-            const summaryDiv = document.createElement('div');
-            summaryDiv.className = 'summary';
-            summaryDiv.innerHTML = `<h2>Bill Summary</h2>`;
         
             // Create lenders section
             const lendersDiv = document.createElement('div');
@@ -357,14 +360,13 @@ document.addEventListener('DOMContentLoaded', function ()
             lenders.forEach(lender => {
                 // For each lender, create a clickable link showing their name and balance
                 const lenderLink = document.createElement('a');
-                lenderLink.href = '#';
+                lenderLink.href = 'javascript:void(0);';
                 lenderLink.textContent = `${lender.person} (+$${lender.balance.toFixed(2)})`;
                 // Add an event listener to show the transactions for this lender when clicked
                 lenderLink.addEventListener('click', () => {
-                    showTransactionsForPerson(lender.person, transactions);
-                    document.getElementById('transaction-details').scrollIntoView({ behavior: 'smooth' });
-                });                lendersDiv.appendChild(lenderLink);
-                lendersDiv.appendChild(document.createElement('br'));
+                    showTransactionsForPerson(lender.person, transactions, lenderLink);
+                });                
+                lendersDiv.appendChild(lenderLink);
             });
         
             // Create neutrals section
@@ -383,53 +385,34 @@ document.addEventListener('DOMContentLoaded', function ()
             debtors.forEach(debtor => {
                 // For each debtor, create a clickable link showing their name and negative balance
                 const debtorLink = document.createElement('a');
-                debtorLink.href = '#';
+                debtorLink.href = 'javascript:void(0);';
                 debtorLink.textContent = `${debtor.person} (-$${Math.abs(debtor.balance).toFixed(2)})`;
                 // Add an event listener to show the transactions for this debtor when clicked
                 debtorLink.addEventListener('click', () => {
-                    showTransactionsForPerson(debtor.person, transactions);
-                    document.getElementById('transaction-details').scrollIntoView({ behavior: 'smooth' });
+                    showTransactionsForPerson(debtor.person, transactions, debtorLink);
                 });
                 debtorsDiv.appendChild(debtorLink);
-                debtorsDiv.appendChild(document.createElement('br'));
             });
         
             // Append lenders, neutrals, and debtors sections to the summary div
-            summaryDiv.appendChild(lendersDiv);
-            summaryDiv.appendChild(neutralsDiv);
-            summaryDiv.appendChild(debtorsDiv);
-            // Append the summary to the results div
-            resultDiv.appendChild(summaryDiv);
-        
+            resultDiv.appendChild(lendersDiv);
+            resultDiv.appendChild(neutralsDiv);
+            resultDiv.appendChild(debtorsDiv);        
         }
     }
     
     // Function to display specific transactions for a person
-    function showTransactionsForPerson(person, transactions) {
+    function showTransactionsForPerson(person, transactions, link) {
 
         // Filter the transactions to include only those that involve the specified person
         const filteredTransactions = transactions.filter(transaction => transaction.includes(person));
-        
-        // Check if the transaction details section already exists in the DOM
-        let transactionDiv = document.getElementById('transaction-details');
-        if (!transactionDiv) {
-            // If it doesn't exist, create a new div for displaying transaction details
-            transactionDiv = document.createElement('div');
-            transactionDiv.id = 'transaction-details';
-            document.getElementById('results').appendChild(transactionDiv);
-        }
-
-        const scrollTo = document.getElementById('transaction-details');
-        scrollTo.scrollIntoView({ behavior: 'smooth' });
-    
-        transactionDiv.textContent = ''; // Clear previous details
 
         // For each filtered transaction, create a new paragraph element and display the transaction
         filteredTransactions.forEach(transaction => {
             const transactionElement = document.createElement('p');
             transactionElement.textContent = transaction;
             // Append each transaction as a new paragraph under the transaction details section
-            transactionDiv.appendChild(transactionElement);
+            link.parentNode.insertBefore(transactionElement, link.nextSibling); // Insert before the next sibling of the link
         });
     }
 

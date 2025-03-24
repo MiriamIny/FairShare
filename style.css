@@ -208,17 +208,14 @@ form button:active {
     margin: 20px;
     font-family: 'Quicksand', sans-serif;
     justify-content: center;
-}
-
-/* Summary Styles */
-.summary {
+    text-align: center;
     background-color: var(--background-color-2);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.summary h2 {
+#results h2 {
     color: var(--accent-color);
     text-align: center;
 }
@@ -227,7 +224,7 @@ form button:active {
 .lenders, .debtors, .neutrals {
     margin: 0 auto;
     text-align: center;
-}
+    margin: 5px;}
 .lenders a {
     color: var(--primary-color);
 }
@@ -238,7 +235,7 @@ form button:active {
     display: block;
     font-weight: bold;
     text-decoration: none;
-    margin: 5px 0;
+    padding: 5px;
 }
 .lenders a:hover, .debtors a:hover {
     color: var(--accent-color);
@@ -246,22 +243,6 @@ form button:active {
 .neutrals p {
     color: var(--text-color);
     font-style: italic;
-}
-
-/* Transaction Details Styles */
-#transaction-details {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: var(--background-color-2);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-#transaction-details p {
-    color: var(--text-color);
-    margin: 5px 0;
-    font-size: 14px;
-    line-height: 1.6;
-    text-align: center;
 }
 
 /*END RESULTS STYLE */
