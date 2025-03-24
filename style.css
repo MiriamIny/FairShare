@@ -24,6 +24,7 @@ body {
     height: 100vh;
     position: relative;
     flex-direction: column;
+    height: 100%;
     width: 100%;
 }
 p {
@@ -36,7 +37,7 @@ section {
     background-color: var(--background-color-2);  /* Changed to match body */
     height: 100vh;
     margin-top: 10px;
-    margin-bottom: 200px;
+    margin-bottom: 550px;
     z-index: 5;
     width: 100%;
 }
@@ -45,7 +46,6 @@ header {
     background-color: var(--background-color-2);
     display: flex;
     align-items: center;
-    border-bottom: var(--border-color) 1px solid;
     padding-left: 20px;
 }
 .logo{
@@ -181,7 +181,7 @@ form button {
     background-color: var(--border-color);
 }
 
-#cost-form, #person-form {
+#cost-form, #person-form, #results {
     display: none;
 }
 

@@ -332,6 +332,11 @@ document.addEventListener('DOMContentLoaded', function ()
     }// end minimizeTransactions
     function displayResults(transactions, lenders, debtors, neutrals) {
 
+        document.getElementById('results').style.display = 'block'; // Show results section
+        Array.from(document.getElementsByClassName('instructions')).forEach(element => {
+            element.style.display = 'none';
+        });
+
         let resultDiv = document.getElementById('results');
         resultDiv.textContent = ''; // Clear previous results
 
