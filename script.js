@@ -227,5 +227,69 @@ document.addEventListener('DOMContentLoaded', function ()
         }
     }
 
+    // Function to minimize transactions between debtors and lenders
+    function minimizeTransactions(debtors, lenders) {
+        let transactions = [];
 
-}) // end DOM Content Loaded
+        // Try to match each debtor with a lender
+        for (let d = 0; d < debtors.length;) {
+            let debtor = debtors[d];
+            let matched = false;
+            for (let l = 0; l < lenders.length; l++) {
+                let lender = lenders[l];
+                if (Math.abs(debtor.balance) === lender.balance) {
+                    transactions.push(`${debtor.person} pays ${lender.person} $${Math.abs(debtor.balance).toFixed(2)}`);
+                    lenders.splice(l, 1); // Remove lender
+                    debtors.splice(d, 1); // Remove debtor
+                    matched = true;
+                    break; // l was removed from lenders so we do not increment l, we want it to remain in the same position for the next iteration
+            }
+            if (!matched) {
+                d++; // Move to the next debtor if no match found
+            }
+        }
+
+        // Check for combined debtors who can pay one lender
+        let combinationsChecked = false;
+        for (let i = 0; i < debtors.length; i++) {
+            for (let j = i + 1; j < debtors.length; j++) {
+                let combinedDebt = debtors[i].balance + debtors[j].balance;
+                for (let lender of lenders) {
+                    if (Math.abs(combinedDebt) === lender.balance) {
+                        // Push two transactions for each debtor paying the lender
+                        transactions.push(`${debtors[i].person} pays ${lender.person} $${Math.abs(debtors[i].balance).toFixed(2)}`);
+                        transactions.push(`${debtors[j].person} pays ${lender.person} $${Math.abs(debtors[j].balance).toFixed(2)}`);
+        
+                        debtors.splice(i, 1); // Remove first debtor
+                        debtors.splice(j - 1, 1); // Adjust index after removal
+                        lenders.splice(lenders.indexOf(lender), 1); // Remove lender
+                        combinationsChecked = true;
+                        break;
+                    }
+                }
+                if (combinationsChecked) break;
+            }
+            if (combinationsChecked) break;
+        }
+
+        // Process remaining debtors and lenders
+        let d = 0, l = 0;
+        while (d < debtors.length && l < lenders.length) {
+            let debtor = debtors[d];
+            let lender = lenders[l];
+            let transferAmount = Math.min(-debtor.balance, lender.balance); // Calculate transfer amount
+
+            transactions.push(`${debtor.person} pays ${lender.person} $${transferAmount.toFixed(2)}`); // Record transaction
+            
+            debtor.balance += transferAmount; // Update debtor's balance
+            lender.balance -= transferAmount; // Update lender's balance
+
+            // Move to the next debtor or lender if their balance is settled
+            if (debtor.balance === 0) d++;
+            if (lender.balance === 0) l++;
+        }
+
+        return transactions; // Return the list of transactions
+        }
+    } // end minimizeTransactions
+});// end DOM Content Loaded
