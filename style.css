@@ -19,6 +19,9 @@ body {
     margin: 0;
     bottom:0;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     position: relative;
     flex-direction: column;
     height: 100%;
@@ -119,6 +122,82 @@ strong {
     font-size: 20px;
 }
 /* END INSTRUCTIONS STYLE */
+/* FORM STYLE */
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background-color-2);
+    border: var(--border-color) 1px solid;
+    color: var(--text-color);
+    padding: 20px;
+    border-radius: 8px;
+    margin: auto;
+    position: relative;
+    left: 50%;
+    transform: translate( -50%);
+}
+
+.input-container {
+    width: 100%;
+}
+
+label {
+    display: block;
+    text-align: left;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+input, select {
+    width: 430px;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+select {
+    width: 450px;
+}
+
+form button {
+    width: 222px;
+    padding: 8px;
+    margin: 20px 0;
+    background-color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: inline;
+    color: var(--text-color);
+}
+
+#add-person, #add-another-cost {
+    background-color: var(--border-color);
+}
+
+#cost-form {
+    display: none;
+}
+
+#cost-form fieldset {
+    border: none;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+
+form button:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form button:active {
+    background-color: var(--hover-color);
+}
+/* END FORM STYLE */
 
 /* FOOTER STYLE */
  footer {

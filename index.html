@@ -46,9 +46,30 @@
         </article>
 
         <!-- Form -->
-        <article id="form">
-            <p>Form</p>
-        </article>
+        <form id="contributors-form">
+
+            <div class="form-group" id="contributors-inputs" >
+                <label for="person-1">Person 1</label>
+                <input type="text" id="person1" name="person-1" class="contributor-name">
+                <label for="person-2">Person 2</label>
+                <input type="text" id="person2" name="person-2">
+            </div>
+
+            <div class="form-group">
+                <button id="add-person">Add Person</button>
+                <button id="add-cost">Add Costs</button>
+            </div>
+        </form>
+
+        <form id="cost-form">
+            <div class="form-group" id="cost-inputs">
+            </div>
+            
+            <div class="form-group">
+                <button id="add-another-cost">Add Cost</button>
+                <button id="calculate">Split it!</button>
+            </div>
+        </form>
 
         <!-- Result -->
         <article id="result">
