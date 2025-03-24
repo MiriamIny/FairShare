@@ -202,16 +202,10 @@ document.addEventListener('DOMContentLoaded', function ()
         }
 
         // Separate debtors and lenders based on balance
-        let debtors = [];
-        let lenders = [];
-        for (let balance of balances) {
-            if (balance.balance > 0) {
-                lenders.push(balance); // Lenders are owed money
-            } else if (balance.balance < 0) {
-                debtors.push(balance); // Debtors owe money
-            }
-        }
-
+        let debtors= balance.filter(balance => balance<0);
+        let lenders = balance.filter(balance => balance>0); 
+        let neutrals = balance.filter(balance => balance===0); // Optional: handle neutral balances if needed
+        
         // Sort debtors and lenders by the amount owed
         lenders.sort((a, b) => b.balance - a.balance); // Largest creditors first
         debtors.sort((a, b) => a.balance - b.balance); // Largest debtors first
