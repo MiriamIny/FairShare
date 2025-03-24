@@ -72,13 +72,12 @@ document.addEventListener('DOMContentLoaded', function ()
         e.preventDefault();
         personCounter++; //keeps track of how many people have been added
         const personText = "Person " + personCounter
-        const personAttributeValue = personText.toLowerCase().replace(' ', '-');
 
         //create a new label element
         const personLabel = addLabel(personText, personAttributeValue);
 
         //create a new input element
-        const personInput = addInput('text', personAttributeValue, personAttributeValue, 'contributor-name');
+        const personInput = addInput('text', 'person-' + personCounter, 'person-' + personCounter, 'contributor-name');
 
         //append the label and input to the person-form before the add person button
         document.querySelector('#contributors-inputs').appendChild(personLabel);
