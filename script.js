@@ -403,4 +403,12 @@ document.addEventListener('DOMContentLoaded', function ()
 
         return transactions; // Return the list of transactions
     }// end minimizeTransactions
+
+    document.getElementById('splitit').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('contributors-form').style.display = 'flex';
+        Array.from(document.getElementsByClassName('description')).forEach(element => {
+            element.style.display = 'none';
+        });
+    });
 });// end DOM Content Loaded
