@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function ()
     function addPerson (e) {
         e.preventDefault();
         personCounter++; // Increment person counter
-        const personText = "Person " + personCounter
+        const personText = "Person " + personCounter;
         const personAttributeValue = personText.toLowerCase().replace(' ', '-');
 
         // Create and append label and input for the new person
