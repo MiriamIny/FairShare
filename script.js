@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function ()
         const personLabel = addLabel(personText, personAttributeValue);
 
         //create a new input element
-        const personInput = addInput('text', personAttributeValue, personAttributeValue, 'contributor-name');
+        const personInput = addInput('text', personAttributeValue, personAttributeValue, 'contributor-name' + personCounter);
 
         //append the label and input to the person-form before the add person button
         document.querySelector('#contributors-inputs').appendChild(personLabel);
@@ -143,6 +143,8 @@ document.addEventListener('DOMContentLoaded', function ()
         
         //add input element
         const costInput2 = addInput('number', 'cost-' + costCounter + '-amount', 'cost-' + costCounter + '-amount', 'cost-amount');
+        //add step attribute
+        costInput2.setAttribute('step', '0.01');
 
         //add label element
         const costLabel3 = addLabel('Who payed', 'cost-' + costCounter + '-person');
@@ -171,6 +173,21 @@ document.addEventListener('DOMContentLoaded', function ()
         //append the fieldset to the cost-form div
         costInputsContainer.appendChild(costFieldset);
     }
+
+
+    // form validation
+    document.addEventListener('input', function (e) {
+        if (e.target.classList.contains('cost-amount')) {
+            let value = e.target.value;
+    
+            // Allow only numbers with up to two decimal places
+            if (!/^\d+(\.\d{0,2})?$/.test(value)) {
+                e.target.value = value.slice(0, -1); // Remove last invalid character
+            }
+        }
+    });
+    
+
 
     // Function to validate that contributors have been added
     function validateContributors() {
