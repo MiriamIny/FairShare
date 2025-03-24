@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function ()
 
     // Function to minimize transactions between debtors and lenders
     function minimizeTransactions(debtors, lenders) {
-        let transactions = [];
+        const transactions = [];
 
         // Try to match each debtor with a lender
         for (let d = 0; d < debtors.length;) {
@@ -278,7 +278,9 @@ document.addEventListener('DOMContentLoaded', function ()
         while (d < debtors.length && l < lenders.length) {
             let debtor = debtors[d];
             let lender = lenders[l];
-            let transferAmount = Math.min(-debtor.balance, lender.balance); // Calculate transfer amount
+            // Calculate transfer amount based on the smaller of the two balances
+            // This ensures that we do not transfer more than either needs to settle
+            let transferAmount = Math.min(-debtor.balance, lender.balance); 
 
             transactions.push(`${debtor.person} pays ${lender.person} $${transferAmount.toFixed(2)}`); // Record transaction
             
